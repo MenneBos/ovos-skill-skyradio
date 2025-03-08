@@ -15,7 +15,6 @@ class SkyRadioSkill(OVOSSkill):
         url = f"http://192.168.1.45/api/manager/logic/webhook/Terre/?tag=SkyRadio"
         data = requests.get(url)
         print(data.json())
-        self.play_audio("/home/ovos/.venvs/ovos/lib/python3.11/site-packages/skill_ovos_melody/soundbytes/As_You_Wish.mp3", False) 
 
 def create_skill():
     return SkyRadioSkill()
