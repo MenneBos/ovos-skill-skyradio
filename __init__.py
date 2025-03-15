@@ -24,7 +24,7 @@ class SkyRadioSkill(OVOSSkill):
         self.speak_dialog("No worry, we can always start the radio again", wait=True)
     
 
-# Route intents to appropriate functions
+    # Route intents to appropriate functions
     def on_intent(intent_request):
         intent_name = intent_request['intent']['name']
         if intent_name == "Playskyradio":
