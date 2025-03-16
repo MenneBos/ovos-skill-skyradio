@@ -8,7 +8,8 @@ class SkyRadioSkill(OVOSSkill):
         super().__init__("SkyRadioSkill")
 
     def initialize(self):
-        # self.add_event('mycroft.skyradio.play', self.handle_play_skyradio)
+        self.add_event('mycroft.skyradio.play', self.handle_play_skyradio)
+        self.add_event('mycroft.skyradio.stop', self.handle_stop_skyradio)
         self.register_intent_file('Playskyradio.intent', self.handle_play_skyradio)
         self.register_intent_file('Stopskyradio.intent', self.handle_stop_skyradio)
 
