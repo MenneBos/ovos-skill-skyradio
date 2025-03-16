@@ -8,19 +8,19 @@ class SkyRadioSkill(OVOSSkill):
         super().__init__("SkyRadioSkill")
 
     def initialize(self):
-        self.add_event('mycroft.skyradio.play', self.handle_play_skyradio)
+        self.add_event('mycroft.skyradio.play', self.handle_play_skyradio)  # add an event in the message.bus, in this case the speak event
         self.add_event('mycroft.skyradio.stop', self.handle_stop_skyradio)
         self.register_intent_file('Playskyradio.intent', self.handle_play_skyradio)
         self.register_intent_file('Stopskyradio.intent', self.handle_stop_skyradio)
 
-    def handle_play_skyradio():
+    def handle_play_skyradio(self, message: Message):
         url = f"http://192.168.1.45/api/manager/logic/webhook/Terre/?tag=SkyRadio"
         data = requests.get(url)
         print(data.json())
         #self.speak_dialog("Enjoy the music", wait=True)
         self.speak("Enjoy the music", wait=True)
 
-    def handle_stop_skyradio():
+    def handle_stop_skyradio(self, message: Message):
         url = f"http://192.168.1.45/api/manager/logic/webhook/Terre/?tag=StopSkyRadio"
         data = requests.get(url)
         print(data.json())
