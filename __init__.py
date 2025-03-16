@@ -16,13 +16,15 @@ class SkyRadioSkill(OVOSSkill):
         url = f"http://192.168.1.45/api/manager/logic/webhook/Terre/?tag=SkyRadio"
         data = requests.get(url)
         print(data.json())
-        self.speak_dialog("Playskyradio", wait=True)
+        #self.speak_dialog("Enjoy the music", wait=True)
+        self.speak("Enjoy the music", wait=True)
 
     def handle_stop_skyradio():
         url = f"http://192.168.1.45/api/manager/logic/webhook/Terre/?tag=StopSkyRadio"
         data = requests.get(url)
         print(data.json())
-        self.speak_dialog("Stopskyradio", wait=True)
+        #self.speak_dialog("Stopskyradio", wait=True)
+        self.speak("No worry, we can always start the radio again", wait=True)
 
 def create_skill():
     return SkyRadioSkill()
