@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 import os
 from setuptools import setup
 from os import walk, path
@@ -49,9 +48,10 @@ def get_version():
     if int(alpha):
         version += f"a{alpha}"
     return version
+    
 
 def find_resource_files():
-    resource_base_dirs = ("locale", "ui", "vocab", "dialog", "regex", "skill")
+    resource_base_dirs = ("locale", "soundbytes", "ui", "vocab", "dialog", "regex", "skill")
     base_dir = path.dirname(__file__)
     package_data = ["*.json"]
     for res in resource_base_dirs:
@@ -63,19 +63,18 @@ def find_resource_files():
                                   '*'))
     return package_data
 
-
 with open(path.join(path.abspath(path.dirname(__file__)), "README.md"), "r") as f:
     long_description = f.read()
 
 setup(
-    name=PYPI_NAME,
+    name='ovos-skill-skyradio',
     version=get_version(),
-    long_description=long_description,
-    url=URL,
-    author=SKILL_AUTHOR,
     description='A skill to play skyradio on google',
+    url='https://github.com/MenneBos/skill-ovos-skyradio',
+    author='Menne',
     author_email='your.email@example.com',
     license='Apache-2.0',
+    #    packages=find_packages(include=['locale','soundbytes']),
     package_dir={SKILL_PKG: ""},
     package_data={SKILL_PKG: find_resource_files()},
     packages=[SKILL_PKG],
