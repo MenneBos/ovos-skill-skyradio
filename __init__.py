@@ -61,8 +61,8 @@ class SkyRadioSkill(OVOSSkill):
     @intent_handler(IntentBuilder("SkyRadioIntent").require("KeyWordSkyRadio"))
     def handle_sky_radio_intent(self, message):
         LOG.info("Sky Radio Adapt intent is triggered with a KeyWord")
-        url = f"http://192.168.1.45/api/manager/logic/webhook/Terre/?tag=SkyRadio"
-        #url = f"http://192.168.1.187/api/manager/logic/webhook/Demo/?tag=SkyRadio"
+        #url = f"http://192.168.1.45/api/manager/logic/webhook/Terre/?tag=SkyRadio"
+        url = f"http://192.168.1.187/api/manager/logic/webhook/Demo/?tag=SkyRadio"
         data = requests.get(url)
         print(data.json())
         # wait=True will block the message bus until the dialog is finished
@@ -71,8 +71,8 @@ class SkyRadioSkill(OVOSSkill):
     @intent_handler("Playskyradio.intent")
     def handle_play_skyradio(self, message):
         LOG.info("Play SkyRadio is trigger by an intent")
-        url = f"http://192.168.1.45/api/manager/logic/webhook/Terre/?tag=SkyRadio"
-        #url = f"http://192.168.1.187/api/manager/logic/webhook/Demo/?tag=SkyRadio"
+        #url = f"http://192.168.1.45/api/manager/logic/webhook/Terre/?tag=SkyRadio"
+        url = f"http://192.168.1.187/api/manager/logic/webhook/Demo/?tag=SkyRadio"
         data = requests.get(url)
         print(data.json())
         self.speak_dialog("Playskyradio", wait=True)
@@ -80,8 +80,8 @@ class SkyRadioSkill(OVOSSkill):
     @intent_handler("Stopskyradio.intent")
     def handle_stop_skyradio(self, message):
         LOG.info("Play SkyRadio is stopped by an intent")
-        url = f"http://192.168.1.45/api/manager/logic/webhook/Terre/?tag=StopSkyRadio"
-        #url = f"http://192.168.1.187/api/manager/logic/webhook/Demo/?tag=SkyRadio"
+        #url = f"http://192.168.1.45/api/manager/logic/webhook/Terre/?tag=StopSkyRadio"
+        url = f"http://192.168.1.187/api/manager/logic/webhook/Demo/?tag=SkyRadio"
         data = requests.get(url)
         print(data.json())
         self.speak_dialog("Stopskyradio", wait=True)
