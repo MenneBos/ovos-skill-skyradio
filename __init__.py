@@ -14,21 +14,14 @@ from ovos_workshop.skills import OVOSSkill
 import requests
 
 DEFAULT_SETTINGS = {
-    "log_level": "WARNING"
+    "log_level": "INFO"
 }
 
 class SkyRadioSkill(OVOSSkill):
-    def __init__(self):
-        super().__init__("SkyRadioSkill")
-
-    def initialize(self):
-        self.settings.merge(DEFAULT_SETTINGS, new_only=True)
-        self.settings_change_callback = self.on_settings_changed
-        self.add_event('mycroft.skyradio.play', self.handle_play_skyradio)  # add an event in the message.bus, in this case the speak event
-        self.add_event('mycroft.skyradio.stop', self.handle_stop_skyradio)
-        #self.register_intent_file('Playskyradio.intent', self.handle_play_skyradio)
-        #self.register_intent_file('Stopskyradio.intent', self.handle_stop_skyradio)
-
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.override = True
+        
     @classproperty
     def runtime_requirements(self):
         # if this isn't defined the skill will
@@ -45,15 +38,17 @@ class SkyRadioSkill(OVOSSkill):
             no_gui_fallback=True,
         )
 
-    DEFAULT_SETTINGS = {
-        "log_level": "INFO"
-    }
+    def initialize(self,):
+        self.settings.merge(DEFAULT_SETTINGS, new_only=True)
+        self.settings_change_callback = self.on_settings_changed
+        self.add_event('mycroft.skyradio.play', self.handle_play_skyradio)  # add an event in the message.bus, in this case the speak event
+        self.add_event('mycroft.skyradio.stop', self.handle_stop_skyradio)
+        #self.register_intent_file('Playskyradio.intent', self.handle_play_skyradio)
+        #self.register_intent_file('Stopskyradio.intent', self.handle_stop_skyradio)
 
-    LOCATION = "Terre" # Else demo network through SIM card
-    if LOCATION == "Terre":
-        HOMEY_IP_ADDRESS = "192.168.1.45"
-    else:
-        HOMEY_IP_ADDRESS = "192.168.1.187"
+    def on_settings_changed(self):
+        """This method is called when the skill settings are changed."""
+        LOG.info("Settings changed!")
 
     @property
     def log_level(self):
@@ -63,10 +58,21 @@ class SkyRadioSkill(OVOSSkill):
         """
         return self.settings.get("log_level", "INFO")
 
+    @intent_handler(IntentBuilder("SkyRadioIntent").require("KeyWordSkyRadio"))
+    def handle_sky_radio_intent(self, message):
+        LOG.info("Sky Radio Adapt intent is triggered with a KeyWord")
+        #url = f"http://192.168.1.45/api/manager/logic/webhook/Terre/?tag=SkyRadio"
+        url = f"http://192.168.1.187/api/manager/logic/webhook/Demo/?tag=SkyRadio"
+        data = requests.get(url)
+        print(data.json())
+        # wait=True will block the message bus until the dialog is finished
+        self.speak_dialog("Playskyradio", wait=True)
+
     @intent_handler("Playskyradio.intent")
     def handle_play_skyradio(self, message):
         LOG.info("Play SkyRadio is trigger by an intent")
-        url = f"http://HOMEY_IP_ADDRESS/api/manager/logic/webhook/Terre/?tag=SkyRadio"
+        #url = f"http://192.168.1.45/api/manager/logic/webhook/Terre/?tag=SkyRadio"
+        url = f"http://192.168.1.187/api/manager/logic/webhook/Demo/?tag=SkyRadio"
         data = requests.get(url)
         print(data.json())
         self.speak_dialog("Playskyradio", wait=True)
@@ -74,20 +80,12 @@ class SkyRadioSkill(OVOSSkill):
     @intent_handler("Stopskyradio.intent")
     def handle_stop_skyradio(self, message):
         LOG.info("Play SkyRadio is stopped by an intent")
-        url = f"http://HOMEY_IP_ADDRESS/api/manager/logic/webhook/Terre/?tag=StopSkyRadio"
+        #url = f"http://192.168.1.45/api/manager/logic/webhook/Terre/?tag=StopSkyRadio"
+        url = f"http://192.168.1.187/api/manager/logic/webhook/Demo/?tag=SkyRadio"
         data = requests.get(url)
         print(data.json())
         self.speak_dialog("Stopskyradio", wait=True)
         #self.speak_dialog("No worry, we can always start the radio again", wait=True)
-
-    @intent_handler(IntentBuilder("SkyRadioIntentnt").require("KeyWordSkyRadio"))
-    def handle_sky_radio_intent(self, message):
-        LOG.info("Sky Radio intent is triggered with KeyWord")
-        url = f"http://HOMEY_IP_ADDRESS/api/manager/logic/webhook/Terre/?tag=SkyRadio"
-        data = requests.get(url)
-        print(data.json())
-        # wait=True will block the message bus until the dialog is finished
-        self.speak_dialog("Playskyradio", wait=True)
 
     def stop(self) -> bool:
         """Optional action to take when "stop" is requested by the user.
@@ -97,5 +95,5 @@ class SkyRadioSkill(OVOSSkill):
         """
         return False
 
-#def create_skill():
-    #return SkyRadioSkill()
+def create_skill():
+    return SkyRadioSkill()
